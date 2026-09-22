@@ -1,0 +1,59 @@
+<section class="dashboard-container">
+  <div class="header-section">
+    <h1>Lineup Analysis Dashboard</h1>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Lineup Size</mat-label>
+      <mat-select [(ngModel)]="leagueLineupSize" (selectionChange)="onSizeChange()">
+        <mat-option *ngFor="let size of lineupSizes" [value]="size.value">
+          {{ size.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="table-container mat-elevation-z8" *ngIf="!isLoading; else loading">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Lineup Column -->
+      <ng-container matColumnDef="lineup">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Lineup </th>
+        <td mat-cell *matCellDef="let element"> {{element.lineup}} </td>
+      </ng-container>
+
+      <!-- Possessions Column -->
+      <ng-container matColumnDef="possessions">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Possessions </th>
+        <td mat-cell *matCellDef="let element"> {{element.possessions}} </td>
+      </ng-container>
+
+      <!-- Offensive Rating Column -->
+      <ng-container matColumnDef="offensive_rating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Off. Rating </th>
+        <td mat-cell *matCellDef="let element"> {{element.offensive_rating | number:'1.1-1'}} </td>
+      </ng-container>
+
+      <!-- Defensive Rating Column -->
+      <ng-container matColumnDef="defensive_rating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Def. Rating </th>
+        <td mat-cell *matCellDef="let element"> {{element.defensive_rating | number:'1.1-1'}} </td>
+      </ng-container>
+
+      <!-- Net Rating Column -->
+      <ng-container matColumnDef="net_rating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Net Rating </th>
+        <td mat-cell *matCellDef="let element" 
+            [ngClass]="{'positive': element.net_rating > 0, 'negative': element.net_rating < 0}"> 
+          {{element.net_rating > 0 ? '+' : ''}}{{element.net_rating | number:'1.1-1'}} 
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <ng-template #loading>
+    <div class="loading-spinner">Fetching advanced metrics...</div>
+  </ng-template>
+</section>
