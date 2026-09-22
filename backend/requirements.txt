@@ -16,3 +16,4 @@ whitenoise==6.9.0
 packaging==25.0
 six==1.17.0
 tzdata==2025.2
+gunicorn
